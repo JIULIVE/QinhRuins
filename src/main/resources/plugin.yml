@@ -1,0 +1,20 @@
+name: QinhRuins
+version: '${project.version}'
+main: com.qinhuai.ruins.QinhRuins
+api-version: '1.21'
+author: Qinhuai
+description: 秦淮遗迹探索插件 — Paper / Purpur / Spigot 1.21.11+，Java 25+
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:2.3.0
+depend: [QinhCoreLib]
+softdepend: [MythicMobs, MMOCore, QinhClass, QinhItems, NeigeItems, ItemsAdder, CraftEngine, Nexo, MMOItems, PlaceholderAPI, Vault, ExcellentEconomy, PlayerPoints, Citizens]
+
+permissions:
+  qinhruins.use:
+    description: 使用 QinhRuins 基础命令
+    default: true
+  qinhruins.admin:
+    description: QinhRuins 全部管理权限
+    default: op
+    children:
+      qinhruins.use: true

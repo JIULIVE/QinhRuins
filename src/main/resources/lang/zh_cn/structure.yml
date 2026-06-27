@@ -1,0 +1,14 @@
+# QinhRuins 结构粘贴/快照 · 简体中文
+structure:
+  file-not-found: "结构文件不存在: {name}"
+  world-null: "世界为空"
+  paste-failed: "粘贴失败: {error}"
+  spread-place: "分帧放置 {count} 块（后台进行）"
+  mask-place: "掩码粘贴 {count} 块"
+  mask-place-failed: "掩码粘贴失败: {error}"
+  save-failed: "保存失败: {error}"
+  snapshot-not-found: "快照文件不存在"
+  restore-failed: "还原失败: {error}"
+  palette-no-layout: "调色板 {palette} 无法生成布局"
+  palette-all-failed: "调色板瓦片全部粘贴失败"
+  procedural-done: "程序化生成 {pasted}/{total} 瓦片"

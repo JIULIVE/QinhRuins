@@ -1,0 +1,14 @@
+# QinhRuins structure paste/snapshot · Français
+structure:
+  file-not-found: "Fichier de structure introuvable : {name}"
+  world-null: "Le monde est null"
+  paste-failed: "Échec du collage : {error}"
+  spread-place: "{count} blocs placés par cadres (exécution en arrière-plan)"
+  mask-place: "{count} blocs collés par masque"
+  mask-place-failed: "Échec du collage par masque : {error}"
+  save-failed: "Échec de l'enregistrement : {error}"
+  snapshot-not-found: "Fichier d'instantané introuvable"
+  restore-failed: "Échec de la restauration : {error}"
+  palette-no-layout: "La Palette {palette} n'a pas pu générer de disposition"
+  palette-all-failed: "Toutes les tuiles de la Palette ont échoué au collage"
+  procedural-done: "Généré par procédure {pasted}/{total} tuiles"

@@ -1,0 +1,20 @@
+# Build output
+target/
+*.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Internal planning / publishing drafts (uncomment to publish)
+PLAN.md
+STRATEGY.md
+SPIGOTMC-bbcode.txt
+SPIGOTMC-update-1.0.0.txt

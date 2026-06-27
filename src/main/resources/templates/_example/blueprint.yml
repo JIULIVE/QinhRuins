@@ -1,0 +1,72 @@
+# ════════════════════════════════════════════════════════════
+#  QinhRuins 蓝图示例：刷怪点 / 奖励箱 / 击杀目标 / 机关 / 核心
+#  一般用  /qr editor start <id>  可视化编辑生成本文件，也可手写。
+#  所有坐标都是「相对结构原点」的方块坐标（结构最小角=0,0,0）。
+# ════════════════════════════════════════════════════════════
+
+# —— 刷怪点（mob: 原版实体名，或 mm-<MythicMobs名>）——
+spawn-points:
+  - { id: s1, x: 5, y: 2, z: 5, mob: ZOMBIE,            count: 3, level: 1, stage: 1 }
+  - { id: s2, x: 8, y: 2, z: 5, mob: SKELETON,          count: 2, level: 1, stage: 1 }
+  - { id: b1, x: 6, y: 2, z: 9, mob: mm-FireSkeleton,   count: 1, level: 5, stage: 2 }
+
+# —— 蓝图奖励箱（与 template.yml 的 loot.container-table 可并存）——
+loot-chests:
+  - { id: c1, x: 3, y: 2, z: 4, loot-table: vault, unlock-stage: 1, per-player-once: true, growth-scaled: true }
+
+# —— 遗迹核心（钥石右键它可激活秘境/词缀）——
+cores:
+  - { x: 6, y: 1, z: 6 }
+
+# —— 分阶段击杀目标（通关条件）——
+objectives:
+  stages:
+    - { stage: 1, name: "清剿前哨", kills: { ZOMBIE: 3, SKELETON: 2 } }
+    - { stage: 2, name: "击败首领", kills: { mm-FireSkeleton: 1 } }
+
+# —— 可编程机关（触发器→动作，纯世界交互，非属性）——
+mechanisms:
+  - id: open_door
+    trigger: { type: REDSTONE, x: 4, y: 1, z: 0 }   # 触发器：该坐标红石充能
+    actions:
+      - { type: FILL, from: { x: 3, y: 1, z: 0 }, to: { x: 5, y: 3, z: 0 }, material: AIR }  # 把门填成空气
+    once: false
+    cooldown: 0
+    require-stage: 0
+
+# —— 子结构随机变体（主结构生成后，在槽位贴一个加权随机模板，做"同主体不同房/塔尖"）——
+# variants:
+#   - id: top
+#     x: 8
+#     y: 20
+#     z: 8                        # 相对结构原点的坐标
+#     surface: false              # true=变体贴该 x/z 的真实地表高度(忽略y)，做"塔基随地形起伏"
+#     y-min: 0                    # 垂直随机重定位：在最终Y基础上随机加 [y-min, y-max] 格(都为0=不抖动)
+#     y-max: 0                    #   如 y-min:-2 y-max:3 做"子结构高低错落"，对标 CS 的 VerticalRepositioning
+#     options:                   # 按 weight 加权随机抽一个贴上去（NONE 朝向）
+#       - { template: spire_a, weight: 30 }
+#       - { template: spire_b, weight: 20 }
+#   # 候选 template 须存在(templates/spire_a/structure.nbt)，建议其 generation.enabled:false 只当变体用；
+#   # 变体应落在主结构范围内（超出部分 /qr remove 快照还原不到）
+#   # ★可嵌套：变体子模板自己的 blueprint.variants 会被递归处理（主堡→角楼→旗），
+#   #   防爆栈/卡服双保险：最大嵌套深度 3 层、单次生成变体总数上限 256（互相引用会被截断+警告）
+
+# —— 最终BOSS门（累计击杀解锁）——
+# 玩法：玩家不停清剿遗迹小怪，累计击杀到阈值 → 自动解锁并生成「最终BOSS」，击败BOSS = 通关。
+# 与上面的 objectives 阶段制是「二选一」的两种通关方式：用了 boss-gate 就不必再用 objectives 定义最终boss阶段。
+# 小怪用上面的 spawn-points 配置；想让玩家刷得够数，建议模板 respawn 设 >0 让小怪重刷。
+# boss-gate:
+#   enabled: true
+#   required-kills: 30          # 累计击杀多少只「指定怪物」才解锁BOSS
+#   count-mobs: [ZOMBIE, SKELETON, mm-FireSkeleton]  # 计入累计的怪（原版实体名 或 mm-<MM怪名>）；留空=本遗迹任何刷怪都算
+#   announce: true             # 解锁瞬间向附近玩家播报「最终BOSS降临」
+#   boss:                      # 解锁后生成的最终BOSS（坐标相对结构原点，与刷怪点同坐标系）
+#     id: final_boss
+#     x: 6
+#     y: 2
+#     z: 9
+#     mob: mm-AncientGuardian   # 原版实体名 或 mm-<MythicMobs名>
+#     count: 1
+#     level: 10
+#   # 进度可用占位符接入HUD（需 PlaceholderAPI）：
+#   #   %qinhruins_boss_kills%（已击杀）/ %qinhruins_boss_required%（需求）/ %qinhruins_boss_remaining%（还差）/ %qinhruins_boss_unlocked%（是否已解锁）

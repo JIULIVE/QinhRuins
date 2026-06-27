@@ -1,0 +1,12 @@
+# 放置档案 · 下界·空中（悬浮在熔岩海上方的平台/堡垒残骸）
+# 提示：下界顶部是基岩，悬浮高度别配太高，建议 20~40。
+enabled: true
+layer: sky
+environments: [NETHER]
+biomes: []
+y-band: { min: 18, max: 38 }
+probability: { numerator: 1, denominator: 900 }
+min-distance-others: 64
+min-distance-same: 260
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

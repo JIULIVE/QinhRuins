@@ -1,0 +1,18 @@
+# QinhRuins 玩家可见消息 · 简体中文
+# 支持 & 颜色码与占位符（如 {ruin} {players} {time} {stage} {class} {n}）
+messages:
+  enter-title: "&6⚔ 进入 {ruin}"
+  enter-subtitle: "&7队伍 {players} 人 · 限时 {time}"
+  exit: "&7你已离开遗迹"
+  complete: "&a遗迹探索完成！"
+  discover: "&e你发现了 &6{ruin}&7 · 已记入图鉴"
+  chest-claimed: "&c你已开启过此宝箱"
+  chest-locked: "&c宝箱尚未解锁，先完成当前目标"
+  stage-advance: "&a▶ 阶段达成"
+  stage-advance-sub: "&7进入：{stage}"
+  complete-sub: "&7{ruin} 已被征服"
+  party-not-enough: "&e还需 {n} 名队友才能进入"
+  growth-too-low: "&c你的成长度不足以进入此遗迹"
+  class-required: "&e队伍中需要 {class} 职业在场"
+  boss-unlock: "&c&l⚔ 最终BOSS降临！"
+  boss-unlock-sub: "&7{ruin} 的守护者被唤醒，击败它！"

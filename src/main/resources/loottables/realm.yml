@@ -1,0 +1,28 @@
+# ============================================================
+#  秘境独占战利品表（净化后按参与者私发）
+#  item: 走 QinhCoreLib ItemManagerAPI 解析，支持 QI/NeigeItems/
+#        ItemsAdder/CraftEngine/Nexo/原版（vanilla:DIAMOND）等任意来源
+#  weight: 权重   amount: 数量（如 1-3）   min-growth: 成长度门槛
+#  unique: true 的条目受"秘藏"词缀加权（独占掉率 ×倍数）
+# ============================================================
+rolls: 3
+entries:
+  - item: "vanilla:DIAMOND"
+    weight: 40
+    amount: "2-5"
+  - item: "vanilla:EMERALD"
+    weight: 30
+    amount: "3-8"
+  - item: "vanilla:EXPERIENCE_BOTTLE"
+    weight: 25
+    amount: "4-12"
+  - item: "vanilla:NETHERITE_SCRAP"
+    weight: 8
+    amount: "1-2"
+    min-growth: 30
+    unique: true
+  - item: "vanilla:ENCHANTED_GOLDEN_APPLE"
+    weight: 4
+    amount: "1"
+    min-growth: 50
+    unique: true

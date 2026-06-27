@@ -1,0 +1,11 @@
+# 放置档案 · 下界·地下（埋在地狱岩层里）
+enabled: true
+layer: underground
+environments: [NETHER]
+biomes: []
+y-band: { min: 8, max: 24 }
+probability: { numerator: 1, denominator: 650 }
+min-distance-others: 48
+min-distance-same: 200
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

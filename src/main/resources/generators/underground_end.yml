@@ -1,0 +1,11 @@
+# 放置档案 · 末地·地下（埋入末地石岛内部）
+enabled: true
+layer: underground
+environments: [THE_END]
+biomes: []
+y-band: { min: 6, max: 18 }
+probability: { numerator: 1, denominator: 750 }
+min-distance-others: 48
+min-distance-same: 200
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

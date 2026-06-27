@@ -1,0 +1,14 @@
+# QinhRuins structure paste/snapshot · Русский
+structure:
+  file-not-found: "Файл структуры не найден: {name}"
+  world-null: "Мир равен null"
+  paste-failed: "Вставка не удалась: {error}"
+  spread-place: "Размещено по кадрам {count} блоков (выполняется в фоне)"
+  mask-place: "Вставлено по маске {count} блоков"
+  mask-place-failed: "Вставка по маске не удалась: {error}"
+  save-failed: "Сохранение не удалось: {error}"
+  snapshot-not-found: "Файл снимка не найден"
+  restore-failed: "Восстановление не удалось: {error}"
+  palette-no-layout: "Палитра {palette} не смогла сгенерировать раскладку"
+  palette-all-failed: "Не удалось вставить ни один тайл палитры"
+  procedural-done: "Процедурно сгенерировано {pasted}/{total} тайлов"

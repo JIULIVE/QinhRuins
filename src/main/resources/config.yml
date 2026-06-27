@@ -1,0 +1,180 @@
+# ============================================================
+#  QinhRuins 配置
+#  遗迹探索插件 · 别名 QR · 指令 /qr
+# ============================================================
+
+config-version: 1                # 配置版本基线，勿手动改（未来配置结构升级时用于自动迁移）
+
+# 语言：玩家可见的战斗/探索消息从 lang/<语言>/*.yml 加载（参照 QinhCoreLib 的多语言）。
+# 内置 7 种：zh_cn(简中) en_US(英文) zh_tw(繁中) ru_RU(俄) fr_FR(法) vi_VN(越) es_ES(西)。
+# 每种语言是一个文件夹，内含 commands/core/editor/gui/realm/structure/... 多个 .yml（loader 自动合并全部）。
+# 想加新语言：复制 lang/en_US/ 整个文件夹改名为 <语言>，翻译里面各 *.yml 即可。
+# 缺失的 key 自动回退 en_US。其余配置内文字（指引/确认GUI/钥石外观）默认英文，可在本文件直接改。
+language: zh_cn                   # 上述 7 种之一，或你自建的语言文件夹名
+
+# 存储后端：默认 yaml（单机够用，零配置）。
+# database = 复用 QinhCoreLib 的数据库（连接/SQLite还是MySQL都在 QinhCoreLib 的 config.yml 里配，QR 不再单独配库）。
+# 群组服(BungeeCord/Velocity)想让【玩家图鉴发现】跨服共享 → 把 QinhCoreLib 配成同一个 MySQL，各后端自然共享。
+# 注意：只有图鉴(per玩家)会进数据库；锚点/宝箱领取/老虎机等绑具体服世界的数据仍各服本地 YAML（本就该本地）。
+storage:
+  type: yaml            # yaml | database（database 跟随 QinhCoreLib 的数据库；旧值 sqlite/mysql 也按 database 处理）
+
+# 后端自动探测、无需配置：结构=Bukkit原生(.schem用/qr import转)；怪物=MythicMobs或原版；成长度/队伍=QinhClass/MMOCore或原版/内置
+
+# 指引系统：右键指引物 → 弹确认GUI → 选"是"扣1个并开启指引；按K(绑定到 /qr guide cancel)取消、或换世界/掉线则返还物品；到达永久扣除。
+# 指引物由物品源给予：§eqinhruins:guide_<模板id>（配方/掉落/商店引用，QR 不内置 give 命令）。
+# ★想要 BetterHud 那种多行自定义 HUD：把 display 设 none，用下面的占位符在你的 HUD 插件里自由排版。
+#   占位符（需装 PlaceholderAPI）：
+#     %qinhruins_guide_active%     是否正在指引（true/false）——HUD 据此显示/隐藏
+#     %qinhruins_guide_ruin%       目标遗迹名
+#     %qinhruins_guide_distance%   剩余距离（格）
+#     %qinhruins_guide_direction%  方向（东/西南/…）
+#     %qinhruins_guide_world%      目标所在世界
+guide:
+  display: title              # title=屏幕中上方标题(默认) | actionbar=物品栏上方 | none=不显示(交给HUD插件)
+  # 内置文字模板（占位符：{ruin} {distance} {direction} {world}）：
+  title: "§e◈ {ruin}"                          # title 模式的主标题
+  subtitle: "§f{distance}m  §7{direction}"      # title 模式的副标题
+  actionbar: "§e{ruin} §f{distance}m  §7{direction}"  # actionbar 模式
+  not-found: "§7Target ruin temporarily lost…"  # 指引途中目标临时解析不到时
+  other-world: "§e{ruin} §7is in another world"
+  search-fail: "§cNo such ruin within {radius} blocks"  # 开启指引时范围内无目标
+  search-radius: 10000        # ★指引搜索半径(格)：太大搜图会卡服，按需调。默认 10000
+  discover-radius: 48         # 进入此半径=到达：永久扣除指引物、结束指引
+  refresh-ticks: 10           # 距离/方向刷新间隔 tick（越大越省）
+  exit-action: swap           # 游戏内退出指引的动作：swap(换手键F) | drop(丢弃键Q) | none。想用任意键(如K)：把该键在客户端键位/HUD里绑到 /qr guide cancel
+  # 右键确认 GUI（title 可换成 ItemsAdder 的 :xxx: 或 CraftEngine 的 <image:xxx> 套图）
+  confirm:
+    title: "Start guidance?"
+    yes-name: "§a✔ Confirm"
+    no-name: "§c✘ Cancel"
+  particle:
+    enabled: true
+    type: SOUL_FIRE_FLAME     # 方向粒子类型：SOUL_FIRE_FLAME(灵魂火苗)/FLAME/END_ROD/HAPPY_VILLAGER/DUST(用下面颜色)/…任意原版粒子名
+    points: 6                 # 方向粒子点数（越少越省）
+    size: 1.0                 # 粒子大小（仅 DUST 生效）
+    min-distance: 2           # 小于此距离不再画方向粒子
+    near-distance: 32         # 小于此距离用 near-color（仅 DUST）
+    near-color: GOLD          # 接近时粒子颜色（仅 DUST）
+    far-color: AQUA           # 远离时粒子颜色（仅 DUST）
+
+# 秘境（词缀 × 层数 endgame）
+realm:
+  tiers:
+    max: 16
+    affix-count: "1 + tier / 3"   # 每层词缀数量（表达式，变量 tier）
+    mob-level: "tier * 5"         # 怪物等级曲线
+    loot-bonus: "1 + tier * 0.1"  # 秘境净化战利品数量倍率（按层数缩放掉落卷数，与词缀贪婪倍率叠乘；默认1层1.1倍→16层2.6倍。写 "1" 关闭按层加成）
+    danger-budget: "40 + tier * 10" # 难度预算上限（词缀 danger 之和封顶，防低层地狱叠加；≤0=不限。首个词缀始终保底，高层预算高才能凑齐"禁疗+限时+怪潮"）
+  keystone:                        # 钥石外观（右键钥石=激活秘境，已屏蔽末影眼飞天等原版行为）
+    # material 支持任意物品源（默认原版）。原版：写材质名或 minecraft:xxx / vanilla:xxx
+    # 其它插件物品（已软依赖）：
+    #   craftengine:xxx | itemsadder:xxx(ia-xxx) | nexo:xxx(nx-xxx)
+    #   qinhitems:xxx(qi-xxx) | mmoitems:类型:id(mi-) | neigeitems:xxx(ni-) | mythicmobs:xxx(mm-xxx)
+    material: minecraft:ender_eye
+    # name/lore 仅作用于【原版材质】钥石；material 指向其它物品源(mi/ni/qi/ia/ce/mm...)时
+    # 完全保留该物品自带的 name/lore，不覆盖。想在自定义物品里显示层数：
+    # 在它自己的 name/lore 里写占位符 %qinhruins_keystone_tier%（需装 PlaceholderAPI）。
+    name: "&dRealm Keystone &7T{tier}"   # {tier}=层数；留空 "" 则原版材质也不改名
+    lore:
+      - "&7Right-click a ruin core to activate a &dT{tier} &7realm"
+    model-data: 0
+  reward:                          # 净化奖励（钥石天梯外的独占战利品，按参与者私发）
+    loot-table: realm              # 独占战利品表名（loottables/<名>.yml）
+    per-tier-table: false          # true 时优先用 realm_t{tier}，缺则回退 loot-table
+    growth-scaled: true            # 个人掉落数量按成长度缩放
+    currency-base: "tier * 100"    # 每位参与者基础货币（表达式，变量 tier；0=关闭，需装经济插件）
+    currency-provider: ""          # 经济后端：留空=auto | vault | excellenteconomy(ee) | playerpoints
+    currency-id: ""                # 货币ID（ExcellentEconomy 必填，如 money/silver/gold；Vault/PP 留空）
+  reroll:                          # 钥石重铸/赌博（花货币重 roll 钥石词缀，满意再激活）
+    enabled: true                  # 关闭则 /qr reroll 不可用，词缀只在激活瞬间盲盒 roll
+    cost-base: "tier * 50"         # 单次重铸花费（表达式，变量 tier；需装经济插件）
+    currency-provider: ""          # 同 reward：留空=auto | vault | excellenteconomy(ee) | playerpoints
+    currency-id: ""                # 货币ID（ExcellentEconomy 必填）
+  failure:
+    consume-keystone: false        # 失败是否消耗钥石（可按层覆盖；高层建议 true 增刺激）
+  activate-radius: 48              # /qr activate 搜索附近遗迹的半径
+  abandon-seconds: 120             # 秘境周围无玩家多久判定放弃（清怪重置，防持久怪堆积）
+  time-limit: "0"                  # 秘境限时，0=无限时（更像世界结构，不像副本倒计时）
+  keystone-chance: 0.5            # 净化后掉落同层钥石的概率（直接进背包，0~1，0=从不掉，1=必掉）
+  next-tier-chance: 0.2            # 净化后额外掉落更高一层钥石的概率（天梯发动机，直接进背包）
+  bossbar-color: PURPLE
+  bossbar-style: SEGMENTED_10
+
+# 可编程机关（蓝图内 trigger→action，纯世界交互非属性；服主在 blueprint.yml 的 mechanisms 段配置）
+mechanisms:
+  enabled: true           # 总开关
+  scan-radius: 48         # 区域/计时触发器扫描半径（玩家进此范围才评估机关）
+  period-ticks: 10        # 区域/计时触发器评估间隔 tick（越大越省，区域进入响应越慢）
+  max-fill-volume: 20000  # 单次 fill 动作最大方块数（防超大区域卡服）
+
+# 容器战利品（结构里摆原版容器即自动生效，每个玩家独立滚奖励、自取、剩下的留着不变）
+vessel:
+  enabled: true                  # 总开关
+  # 容器归属由结构(原理图)占地范围自动判定：容器在遗迹结构 AABB 内即属于该遗迹，无需配半径
+  refresh-mode: per-player-once  # per-player-once=每人仅一次 | timed=冷却后可再开重滚
+  refresh-cooldown: 30m          # timed 模式的冷却（30m/1h/...）
+  rows: 3                        # 容器界面行数（1-6）
+  # 容器用哪张表：在遗迹模板 template.yml 的 loot.container-table 指定；
+  # 表里 containers 字段声明哪些容器类型生效（如 [CHEST, BARREL]）
+
+# 遗迹保护：探索/激活中不可破坏放置，通关后解锁
+protection:
+  enabled: true   # 锁定条件：秘境激活中、或有击杀目标且未完成。管理员(qinhruins.admin)和"挖穿"机关触发块不受限
+
+# 移除/清理
+cleanup:
+  snapshot-restore: true  # 生成结构前快照原地形，/qr remove 时还原（关闭省磁盘，但移除不还原方块）
+  max-snapshot-volume: 500000  # 快照体积上限(方块数)：超大结构(如百万级)同步快照会卡死主线程→看门狗杀服。超此值跳过快照(移除不还原但不卡服)。0=不限(危险)
+
+# 预览暂存（/qr stage：放置前先用幽灵方块在原地预览结构本体，仅自己可见，不改世界）
+staging:
+  preview-cap: 12000  # 幽灵方块预览的方块数上限：结构超此值则只画粒子边框(发送过多假方块会卡客户端)。调大可预览更大结构
+
+# 世界生成
+generation:
+  enabled: true         # 自然生成总开关（关闭则只能 /qr spawn 手动投放）
+  grid-bucket-size: 512 # 空间索引分桶尺寸
+  max-per-tick: 4       # 每次处理的候选区块上限（限流防卡）
+  max-millis-per-tick: 3  # ★每次处理的毫秒预算：处理超过此耗时即让出本tick（比固定条数更抗压，防生成尖峰冻服）
+  period-ticks: 5       # 候选处理任务的间隔 tick
+  spread-place-threshold: 30000  # 结构方块数超此值且NONE朝向→分帧放置(8192块/tick,后台铺,不冻服)。小结构仍原生单发
+  marker-blocks: true   # 原理图标记块自动处理：屏障(BARRIER)→放置时清为空气；基岩(BEDROCK)→保留原地形不覆盖(用作"地形透出"标记)。false=原样放置(想保留真屏障/真基岩时关)
+
+  # 生成总控（统一调度：权重抽签 + 全局密度 + 活世界再生）
+  # 关闭(enabled:false)时回退到“每个模板各自按 generation.probability 独立 roll”的旧行为，完全向后兼容。
+  # 注意：总控仍受上面 generation.enabled 总开关约束（关了整套生成都停）。
+  director:
+    enabled: true         # 开启后由总控接管：所有遗迹按权重竞争抽签，受全局密度约束（老服config无此段=自动回退旧逻辑）
+    notify-admins: true   # 任意遗迹自然生成时，私聊在线管理员(qinhruins.admin)报坐标（含 /qr tp）。调试找遗迹神器，嫌吵可关
+    chunk-chance: 80      # 新区块尝试生成的概率分母（每个新区块 1/N 几率尝试；0=探索不主动刷，纯靠下面的 live。想多就调小如 40）
+    live:                 # 活世界：已探索的世界也会随时间冒出新遗迹（不止新区块）
+      enabled: true
+      interval: 10m       # 每隔多久围绕在线玩家尝试生成一次（这就是“刷新间隔”，调试可改 1m/30s）
+      chance: 0.25        # 每名玩家每次尝试的概率（越高刷得越勤）
+      min-radius: 80      # 在玩家这个环带内选址（避开脚下，太近会突兀）
+      max-radius: 220     # 一般略大于视距，新遗迹在玩家走近时“正好已经在那”
+    density:              # 全局密度（“总体世界遗迹刷新密度”）
+      region-size: 512    # 密度统计的方格边长
+      max-per-region: 3   # 每个方格内最多几个遗迹（0=不限）
+      min-spacing: 48     # 任意两遗迹最小间距，贴脸兜底（0=不限）
+    regen-hours: 24       # 打通的遗迹多久后“消退”：附近无人时快照还原地形、腾出密度名额，让世界生成新的（0=永不消退；想真消退需开 cleanup.snapshot-restore）
+    weights:              # 一堆遗迹按权重抽一个（数字越大越常见）；留空=自动用各模板 generation.probability 折算
+      []
+      # - { template: ancient_tower, weight: 30 }
+      # - { template: sunken_crypt,  weight: 10 }
+
+# 刷怪（结构内容，靠玩家靠近自动激活，非副本化）
+combat:
+  activation-radius: 48     # 玩家进入此半径激活锚点刷怪
+  spawn-period-ticks: 40    # 激活检测间隔 tick（越大越省）
+
+# 会话（进入/退出/副本）
+session:
+  enter-radius: 48        # /qr enter 时搜索附近锚点的半径，队友也需在此范围内才算集结
+  bossbar: true
+  bossbar-color: PURPLE   # PINK/BLUE/RED/GREEN/YELLOW/PURPLE/WHITE
+  bossbar-style: SOLID    # SOLID/SEGMENTED_6/SEGMENTED_10/SEGMENTED_12/SEGMENTED_20
+
+# 玩家可见消息已迁移到 lang/<语言>/messages.yml（见顶部 language 配置项）。
+# 想改这些文案：编辑 lang/zh_cn/messages.yml 或 lang/en_US/messages.yml。

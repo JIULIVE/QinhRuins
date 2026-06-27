@@ -1,0 +1,189 @@
+# ============================================================
+#  QinhRuins 词缀库（秘境 modifier）
+#  ★架构红线：QR 不算 stat/属性。怪变强=委托 MythicMobs 提 level；
+#   玩家属性=委托 AttributePlus(待 CoreLib 桥接)；QR 只做 数量/环境/规则/战利品。
+#  effect.type 说明：
+#    mob-level-bonus  → 刷怪时 level +bonus（MM 自己缩放 stat）
+#    mob-count-mult   → 刷怪数量 ×mult（QR 编排，非 stat）
+#    player-status    → 原版药水效果（params: 效果名→等级）
+#    no-heal          → 禁疗规则（QR 取消回血事件）
+#    time-limit       → 限时（秒）
+#    loot-quantity-mult  → 净化掉落数量 ×mult（贪婪）
+#    unique-chance-mult  → 独占条目(unique:true)权重 ×mult（秘藏）
+#    currency-mult       → 货币奖励 ×mult（鎏金，走 CoreLib 经济桥 Vault/EE/PP）
+#    broadcast        → 激活时全服播报（effect.message，支持 {ruin}/{tier}）
+#    command          → 激活时对在场玩家执行命令（effect.commands 列表，{player}/{tier}）
+#    script           → JS 脚本自定义（effect.script: "qinhruins:文件.js:函数"，见 scripts/affix_example.js）
+# ============================================================
+affixes:
+
+  elite-swarm:
+    name: "&c精英成群"
+    lore: ["&7刷怪数量 +50%"]
+    category: MOB
+    group: mob-count          # 同组互斥：与"怪潮"不会同时出现
+    danger: 30
+    reward: 30
+    min-tier: 2
+    effect:
+      type: mob-count-mult
+      params: { mult: 1.5 }
+
+  horde:
+    name: "&4怪潮"
+    lore: ["&7刷怪数量翻倍"]
+    category: MOB
+    group: mob-count
+    danger: 45
+    reward: 45
+    min-tier: 5
+    effect:
+      type: mob-count-mult
+      params: { mult: 2.0 }
+
+  veteran:
+    name: "&c百战"
+    lore: ["&7怪物等级 +2（由怪物插件缩放）"]
+    category: MOB
+    group: mob-level          # 与"霸主"互斥
+    danger: 25
+    reward: 20
+    min-tier: 1
+    effect:
+      type: mob-level-bonus
+      params: { bonus: 2 }
+
+  overlord:
+    name: "&4霸主"
+    lore: ["&7怪物等级 +5（由怪物插件缩放）"]
+    category: MOB
+    group: mob-level
+    danger: 40
+    reward: 35
+    min-tier: 4
+    effect:
+      type: mob-level-bonus
+      params: { bonus: 5 }
+
+  oppression:
+    name: "&5重压"
+    lore: ["&7笼罩区域：缓慢 I + 挖掘疲劳 I"]
+    category: PLAYER
+    danger: 20
+    reward: 15
+    min-tier: 1
+    effect:
+      type: player-status
+      params: { SLOWNESS: 0, MINING_FATIGUE: 0 }
+
+  enfeeble:
+    name: "&5虚弱诅咒"
+    lore: ["&7笼罩区域：虚弱 I"]
+    category: PLAYER
+    danger: 25
+    reward: 20
+    min-tier: 2
+    effect:
+      type: player-status
+      params: { WEAKNESS: 0 }
+
+  eternal-night:
+    name: "&8永夜"
+    lore: ["&7笼罩区域：黑暗"]
+    category: ENV
+    danger: 20
+    reward: 18
+    min-tier: 1
+    effect:
+      type: player-status
+      params: { DARKNESS: 0 }
+
+  brittle-ward:
+    name: "&5脆弱结界"
+    lore: ["&7笼罩区域：禁用一切治疗"]
+    category: PLAYER
+    danger: 45
+    reward: 40
+    min-tier: 5
+    effect:
+      type: no-heal
+      params: {}
+
+  sands-of-time:
+    name: "&e时之沙"
+    lore: ["&7限时 5 分钟内净化"]
+    category: ENV
+    danger: 30
+    reward: 30
+    min-tier: 3
+    effect:
+      type: time-limit
+      params: { seconds: 300 }
+
+  greed:
+    name: "&6贪婪"
+    lore: ["&7战利品数量 +150%"]
+    category: LOOT
+    danger: 0
+    reward: 50
+    min-tier: 1
+    effect:
+      type: loot-quantity-mult
+      params: { mult: 2.5 }
+
+  golden-touch:
+    name: "&6鎏金"
+    lore: ["&7货币掉落 +200%"]
+    category: LOOT
+    danger: 0
+    reward: 45
+    min-tier: 1
+    effect:
+      type: currency-mult
+      params: { mult: 3.0 }
+
+  hidden-trove:
+    name: "&b秘藏"
+    lore: ["&7独占物品掉率 ×3"]
+    category: LOOT
+    danger: 0
+    reward: 60
+    min-tier: 3
+    effect:
+      type: unique-chance-mult
+      params: { mult: 3.0 }
+
+  # ===== 扩展效果类型示例 =====
+
+  herald:
+    name: "&d秘境降临"
+    lore: ["&7激活时全服播报，号召强者"]
+    category: ENV
+    danger: 0
+    reward: 5
+    min-tier: 1
+    effect:
+      type: broadcast
+      message: "&5&l[秘境] &d{ruin} &7被注入了 &dT{tier} &7之力，强者集结！"
+
+  # —— 命令词缀（yaml 自定义；去掉#即用，{player}=玩家 {tier}=层数）——
+  # blood-ritual:
+  #   name: "&4血祭"
+  #   danger: 25
+  #   reward: 20
+  #   min-tier: 3
+  #   effect:
+  #     type: command
+  #     commands:
+  #       - "effect give {player} minecraft:wither 200 0"
+  #       - "mm mobs spawn EliteBoss 1 {player}"
+
+  # —— JS 脚本词缀（会 JS 的服主，逻辑写在 scripts/affix_example.js）——
+  # scripted-trial:
+  #   name: "&c血之考验"
+  #   danger: 25
+  #   reward: 20
+  #   min-tier: 3
+  #   effect:
+  #     type: script
+  #     script: "qinhruins:affix_example.js:onActivate"

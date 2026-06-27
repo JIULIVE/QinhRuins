@@ -1,0 +1,18 @@
+# QinhRuins player-facing messages · French
+# Supports & color codes and placeholders ({ruin} {players} {time} {stage} {class} {n})
+messages:
+  enter-title: "&6⚔ Entrée dans {ruin}"
+  enter-subtitle: "&7Groupe de {players} · Temps {time}"
+  exit: "&7Vous avez quitté la ruine"
+  complete: "&aRuine terminée !"
+  discover: "&eVous avez découvert &6{ruin}&7 · ajoutée au codex"
+  chest-claimed: "&cVous avez déjà ouvert ce coffre"
+  chest-locked: "&cCoffre verrouillé — terminez d'abord l'objectif en cours"
+  stage-advance: "&a▶ Étape terminée"
+  stage-advance-sub: "&7Entrée dans : {stage}"
+  complete-sub: "&7{ruin} a été conquise"
+  party-not-enough: "&e{n} coéquipier(s) de plus requis pour entrer"
+  growth-too-low: "&cVotre niveau de progression est trop faible pour entrer dans cette ruine"
+  class-required: "&eUne classe {class} est requise dans le groupe"
+  boss-unlock: "&c&l⚔ Le boss final s'éveille !"
+  boss-unlock-sub: "&7Le gardien de {ruin} s'est levé — vainquez-le !"

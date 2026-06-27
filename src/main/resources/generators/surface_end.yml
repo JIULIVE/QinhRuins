@@ -1,0 +1,11 @@
+# 放置档案 · 末地·地表（坐落在末地岛屿表面）
+enabled: true
+layer: surface
+environments: [THE_END]
+worlds: []
+biomes: []                 # 可细分 THE_END/END_HIGHLANDS/END_MIDLANDS/END_BARRENS/SMALL_END_ISLANDS
+probability: { numerator: 1, denominator: 750 }
+min-distance-others: 56
+min-distance-same: 240
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

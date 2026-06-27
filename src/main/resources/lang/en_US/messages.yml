@@ -1,0 +1,18 @@
+# QinhRuins player-facing messages · English
+# Supports & color codes and placeholders ({ruin} {players} {time} {stage} {class} {n})
+messages:
+  enter-title: "&6⚔ Entering {ruin}"
+  enter-subtitle: "&7Party of {players} · Time {time}"
+  exit: "&7You have left the ruin"
+  complete: "&aRuin cleared!"
+  discover: "&eYou discovered &6{ruin}&7 · added to the codex"
+  chest-claimed: "&cYou have already opened this chest"
+  chest-locked: "&cChest locked — finish the current objective first"
+  stage-advance: "&a▶ Stage cleared"
+  stage-advance-sub: "&7Entering: {stage}"
+  complete-sub: "&7{ruin} has been conquered"
+  party-not-enough: "&e{n} more teammate(s) needed to enter"
+  growth-too-low: "&cYour growth is too low to enter this ruin"
+  class-required: "&eA {class} class is required in the party"
+  boss-unlock: "&c&l⚔ The Final Boss Awakens!"
+  boss-unlock-sub: "&7The guardian of {ruin} has risen — defeat it!"

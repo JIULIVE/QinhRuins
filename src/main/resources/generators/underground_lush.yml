@@ -1,0 +1,11 @@
+# 放置档案 · 地下·繁茂洞穴
+enabled: true
+layer: underground
+environments: [NORMAL]
+biomes: [LUSH_CAVES]
+y-band: { min: 6, max: 24 }
+probability: { numerator: 1, denominator: 500 }
+min-distance-others: 40
+min-distance-same: 180
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

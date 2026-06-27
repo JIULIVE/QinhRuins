@@ -1,0 +1,14 @@
+# QinhRuins structure paste/snapshot · English
+structure:
+  file-not-found: "Structure file not found: {name}"
+  world-null: "World is null"
+  paste-failed: "Paste failed: {error}"
+  spread-place: "Frame-placed {count} blocks (running in background)"
+  mask-place: "Mask-pasted {count} blocks"
+  mask-place-failed: "Mask paste failed: {error}"
+  save-failed: "Save failed: {error}"
+  snapshot-not-found: "Snapshot file not found"
+  restore-failed: "Restore failed: {error}"
+  palette-no-layout: "Palette {palette} could not generate a layout"
+  palette-all-failed: "All palette tiles failed to paste"
+  procedural-done: "Procedurally generated {pasted}/{total} tiles"

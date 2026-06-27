@@ -1,0 +1,11 @@
+# 放置档案 · 地表·荒漠
+enabled: true
+layer: surface
+environments: [NORMAL]
+biomes:
+  - DESERT
+probability: { numerator: 1, denominator: 600 }
+min-distance-others: 64
+min-distance-same: 256
+flatness: { radius: 4, max-variance: 4 }
+whitelist-ground: [SAND, SANDSTONE, RED_SAND]

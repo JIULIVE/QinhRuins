@@ -1,0 +1,20 @@
+# 放置档案 · 海底（主世界）—— 沉到海床的水下遗迹
+# 注意：水下结构请确保原理图自带封闭外壳，否则内部会灌水。
+enabled: true
+layer: seabed              # 沉到海床；无水自动换点
+environments: [NORMAL]
+biomes:
+  - OCEAN
+  - DEEP_OCEAN
+  - WARM_OCEAN
+  - LUKEWARM_OCEAN
+  - DEEP_LUKEWARM_OCEAN
+  - COLD_OCEAN
+  - DEEP_COLD_OCEAN
+  - FROZEN_OCEAN
+  - DEEP_FROZEN_OCEAN
+probability: { numerator: 1, denominator: 800 }
+min-distance-others: 64
+min-distance-same: 280
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

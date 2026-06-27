@@ -1,0 +1,18 @@
+# 放置档案 · 地表·荒原（恶地/热带草原/蘑菇岛）
+enabled: true
+layer: surface
+environments: [NORMAL]
+biomes:
+  - BADLANDS
+  - ERODED_BADLANDS
+  - WOODED_BADLANDS
+  - SAVANNA
+  - SAVANNA_PLATEAU
+  - WINDSWEPT_SAVANNA
+  - MUSHROOM_FIELDS
+  - STONY_PEAKS
+probability: { numerator: 1, denominator: 650 }
+min-distance-others: 64
+min-distance-same: 256
+flatness: { radius: 4, max-variance: 5 }
+whitelist-ground: []

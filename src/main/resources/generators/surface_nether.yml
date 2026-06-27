@@ -1,0 +1,11 @@
+# 放置档案 · 下界·地表（坐落在下界地形顶面，已避开基岩天花板）
+enabled: true
+layer: surface
+environments: [NETHER]
+worlds: []
+biomes: []                 # 可细分 NETHER_WASTES/CRIMSON_FOREST/WARPED_FOREST/SOUL_SAND_VALLEY/BASALT_DELTAS
+probability: { numerator: 1, denominator: 700 }
+min-distance-others: 56
+min-distance-same: 240
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

@@ -1,0 +1,11 @@
+# 放置档案 · 末地·虚空浮岛（悬浮在末地岛屿上方）
+enabled: true
+layer: sky
+environments: [THE_END]
+biomes: []
+y-band: { min: 25, max: 60 }
+probability: { numerator: 1, denominator: 900 }
+min-distance-others: 72
+min-distance-same: 280
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

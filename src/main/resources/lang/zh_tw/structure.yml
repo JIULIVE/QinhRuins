@@ -1,0 +1,14 @@
+# QinhRuins 結構貼上/快照 · 繁體中文
+structure:
+  file-not-found: "結構檔案不存在: {name}"
+  world-null: "世界為空"
+  paste-failed: "貼上失敗: {error}"
+  spread-place: "分幀放置 {count} 塊（後台進行）"
+  mask-place: "遮罩貼上 {count} 塊"
+  mask-place-failed: "遮罩貼上失敗: {error}"
+  save-failed: "儲存失敗: {error}"
+  snapshot-not-found: "快照檔案不存在"
+  restore-failed: "還原失敗: {error}"
+  palette-no-layout: "調色板 {palette} 無法生成佈局"
+  palette-all-failed: "調色板瓦片全部貼上失敗"
+  procedural-done: "程序化生成 {pasted}/{total} 瓦片"

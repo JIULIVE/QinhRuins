@@ -1,0 +1,106 @@
+# ════════════════════════════════════════════════════════════
+#  QinhRuins 遗迹模板示例（带注释）
+#  复制本文件夹 → 改名为你的遗迹id → 放入 structure.nbt → 按需改字段
+#  本 _example 文件夹以 "_" 开头，会被插件忽略，不会当成真遗迹加载
+# ════════════════════════════════════════════════════════════
+
+id: example_ruin                 # 遗迹唯一ID（留空=用文件夹名）
+display: "§6示例遗迹"            # 显示名（支持 & 和 § 颜色码）
+icon: FILLED_MAP                 # 图鉴里的图标材质（如 OAK_BOAT / ELYTRA）
+respawn: 30m                     # 刷怪重置间隔（30s/10m/1h/2d；0=不重置）
+
+structure:
+  file: structure.nbt            # 结构文件名（放在本文件夹内，原生 .nbt；.schem 用 /qr import 转）
+  rotation: none                 # none / random（无标记点的结构可随机朝向）
+  # target-mask: [AIR]           # 掩码粘贴：只在这些世界方块处放置=结构融进地形不推土。
+  #                              # REPLACEABLE=空气+水+植被+雪+树叶；列具体材质也行；留空/不写=整体粘贴(默认)。
+  #                              # 排除写法：!材质 表示"除了它都放"，如 [REPLACEABLE, "!BEDROCK"] 可替换处放但绝不覆盖基岩。
+  #                              # 注意：启用掩码的结构强制 NONE 朝向；逐方块放置，超大结构略慢。
+  # source-skip: [AIR]           # 源方块过滤(黑名单)：跳过这些类型不放置（不放空气=不清空气盒；过滤占位块）。
+  # source-mask: [STONE, DEEPSLATE]  # 源方块白名单：只放这些类型，其余全跳过；支持 !材质 排除。与 source-skip 黑名单互补。
+  # replace-blocks:              # 粘贴后批量换块（分帧不卡）：
+  #   STONE: AIR                 #   石头→空气=掏空；
+  #   OAK_PLANKS: DARK_OAK_PLANKS #  换材质=做主题皮肤变体
+  # ★标记块（全局开关 config.generation.marker-blocks，默认开）：
+  #   原理图里摆【屏障 BARRIER】→放置时自动清成空气（划出镂空/门洞）；
+  #   摆【基岩 BEDROCK】→放置时保留原地形不覆盖（让山体/地面从结构里"透"出来，做半埋遗迹）。
+  #   想在结构里用真屏障/真基岩 → 把 config 的 marker-blocks 关掉。
+
+# —— 在哪生成：引用 generators/ 的放置档案，下面只写要覆盖的字段 ——
+generation:
+  profile: surface_overworld     # 引用放置档案（17 个内置，见 generators/）
+  enabled: true                  # 是否参与自然生成
+  weight: 20                     # 总控抽签权重（越大越常见）
+  # priority: 0                  # 优先级：数字越小越优先；同点竞争时只有最高优先级(最小值)那批参与抽签。默认0(都同级=纯按权重)
+  # spawn-chance: 1.0            # ★绝对稀有度：被抽中后再独立掷骰，<1.0 才真正变稀有(如0.1=被选中也只10%真生成,做稀有地标)。默认1.0=必生成
+  # —— 以下都可单独写，覆盖 profile 同名项 ——
+  # environments: [NORMAL]       # 维度 NORMAL/NETHER/THE_END；空=不限
+  # worlds: [world]              # 限定世界名；空=该维度所有世界
+  biomes: [PLAINS, FOREST]       # 限定群系；空=不限
+  y: surface                     # 生成层 surface/underground/sky/ocean-surface/seabed/top，固定数字Y，
+                                 #   或相对地表:+8(地表上8格)/-5(地表下5格)/+[3;12](地表上随机3~12)/-[2;6]
+  # y-band: { min: 10, max: 35 } # underground/sky 的随机深度/高度
+  # y-offset: 0                  # 垂直微调（海面已自动对齐水线，一般留0）
+  # heightmap: world-surface     # surface层高度图：world-surface/motion-blocking/motion-blocking-no-leaves/ocean-floor（默认留空=智能跳树冠落真地面）
+  # whitelist-ground: [GRASS_BLOCK, DIRT]   # 仅允许落在这些地面方块上
+  # blacklist-ground: [SAND, WATER]          # 禁止落在这些地面方块上（whitelist 的补集）
+  flatness: { radius: 4, max-variance: 4, max-errors: 0 }  # 选址平整度(radius=0不检测;max-errors=允许N个凸起采样点,即CS的flat_error)
+  # spawn-in-water: true         # false=不允许落在水面方块上
+  # spawn-in-lava: false         # true=允许落在岩浆面（下界岩浆海主题）
+  # spawn-in-void: true          # false=强制落在实心地面（拒绝脚下悬空）
+  min-distance-others: 64        # 距任意遗迹最小间距。设了就用它(可低于全局 density.min-spacing)；不设(0)才用全局兜底
+  min-distance-same: 256         # 距同类遗迹最小间距
+  # spawn-region: { min-x: -2000, min-z: -2000, max-x: 2000, max-z: 2000, exclude: false }
+  #                              # 坐标盒(x/z)限制：exclude:false=只在盒内生成；exclude:true=只在盒外(如"出生点附近不刷")
+
+# —— 容器战利品：结构里摆原版箱子，玩家打开按此表滚奖励（每人独立）——
+loot:
+  mode: per-player               # ★战利品模式：per-player=每位玩家首次开箱各得一份(保留神秘感,按各自成长度缩放)；
+                                 #   shared=全服共享真实容器(先到先得,谁拿走就没了,熔炉/酿造按真实槽位填,
+                                 #   战利品中性:不吃成长度也不受min-growth门槛,人人同一份)。
+  container-table: vault         # loottables/vault.yml（单表，所有容器共用）
+  # container-tables:            # 或按容器类型分表（优先于上面单表）：
+  #   CHEST: vault               #   箱子用 vault
+  #   BARREL: default            #   木桶用 default
+  # ★ 提醒：若结构里有大量装饰容器(如船体木桶)，去对应 loot 表写
+  #    containers: [CHEST]  只让箱子出奖励，避免木桶全变宝箱
+
+# —— 通关奖励：完成击杀目标后发放 ——
+reward:
+  clear-table: realm             # loottables/realm.yml
+
+# —— 进入门槛（QR 不实例化，这是"够资格在此活动"的软门槛）——
+entry:
+  min-players: 1
+  max-players: 10
+  # required-classes: [warrior]  # 需在场的职业（QinhClass）
+  min-growth: 0.0                # 最低成长度
+  # cost: "100"                  # 进入花费（经济）
+  cooldown: 0s
+
+# —— 地基/地形融合 ——
+foundation:
+  enabled: true
+  max-depth: 16                  # 向下最多填多少格
+  ignore-water: true
+  blend-radius: 4                # ★边缘向外渐变N格融进地形（0=只填正下方，可能有断崖）
+  materials:                     # 按群系换地基材质
+    default: STONE
+    "DESERT,BADLANDS": SANDSTONE
+
+titles:
+  enter-new: "§6⚔ 你进入了 {ruin}"
+  clear: "§a你通过了 {ruin} 的考验"
+  enter-explored: "§7来晚一步，只能翻翻箱子了"
+
+# —— 指引物 ——
+# 玩家手持它右键 → 确认GUI → 开启指引（指向最近的此类遗迹），到达即永久消耗。
+# QR 不内置发放指令；指引物只能由物品源插件给出，引用本遗迹的 qinhruins:guide_<本遗迹id>。
+guide_item: ''                   # ★指引物引用：留空=用下面 guide-item 段自建简易罗盘；
+                                 #   也可填物品源引用，如 qi:xxx / mi:类型:id / ia:xxx / ce:xxx / mm:xxx，
+                                 #   或直接写原版材质名（如 COMPASS）。
+guide-item:                      # guide_item 留空时的兜底外观（自建简易罗盘）
+  material: COMPASS
+  name: "§b遗迹罗盘"
+  lore: ["§7手持右键开启指引"]
+  consumable: false

@@ -1,0 +1,28 @@
+# 放置档案 · 地表·草木带（平原/森林/针叶林/沼泽等）
+enabled: true
+layer: surface
+environments: [NORMAL]
+biomes:
+  - PLAINS
+  - SUNFLOWER_PLAINS
+  - FOREST
+  - BIRCH_FOREST
+  - OLD_GROWTH_BIRCH_FOREST
+  - DARK_FOREST
+  - FLOWER_FOREST
+  - JUNGLE
+  - SPARSE_JUNGLE
+  - BAMBOO_JUNGLE
+  - SWAMP
+  - MANGROVE_SWAMP
+  - TAIGA
+  - OLD_GROWTH_PINE_TAIGA
+  - OLD_GROWTH_SPRUCE_TAIGA
+  - MEADOW
+  - WINDSWEPT_FOREST
+  - WINDSWEPT_HILLS
+probability: { numerator: 1, denominator: 600 }
+min-distance-others: 64
+min-distance-same: 256
+flatness: { radius: 4, max-variance: 4 }
+whitelist-ground: []

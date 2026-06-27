@@ -1,0 +1,18 @@
+# QinhRuins player-facing messages · Russian
+# Supports & color codes and placeholders ({ruin} {players} {time} {stage} {class} {n})
+messages:
+  enter-title: "&6⚔ Вход в {ruin}"
+  enter-subtitle: "&7Группа из {players} · Время {time}"
+  exit: "&7Вы покинули руину"
+  complete: "&aРуина зачищена!"
+  discover: "&eВы открыли &6{ruin}&7 · добавлено в кодекс"
+  chest-claimed: "&cВы уже открывали этот сундук"
+  chest-locked: "&cСундук заперт — сначала выполните текущую задачу"
+  stage-advance: "&a▶ Стадия зачищена"
+  stage-advance-sub: "&7Вход: {stage}"
+  complete-sub: "&7{ruin} покорена"
+  party-not-enough: "&eНужно ещё {n} союзник(ов) для входа"
+  growth-too-low: "&cВаш уровень развития слишком низок для входа в эту руину"
+  class-required: "&eВ группе требуется класс {class}"
+  boss-unlock: "&c&l⚔ Финальный босс пробудился!"
+  boss-unlock-sub: "&7Страж {ruin} восстал — победите его!"

@@ -1,0 +1,8 @@
+# 默认战利品表（编辑器标记宝箱的默认表，避免"奖励表缺失"）
+rolls: 2
+entries:
+  - { item: "vanilla:IRON_INGOT", weight: 20, amount: "1-4" }
+  - { item: "vanilla:GOLD_INGOT", weight: 12, amount: "1-3" }
+  - { item: "vanilla:DIAMOND", weight: 5, amount: "1-2" }
+  - { item: "vanilla:EXPERIENCE_BOTTLE", weight: 15, amount: "2-5" }
+  - { item: "vanilla:BREAD", weight: 25, amount: "2-6" }

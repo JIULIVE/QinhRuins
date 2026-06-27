@@ -1,0 +1,18 @@
+# 放置档案 · 地表·冰雪带
+enabled: true
+layer: surface
+environments: [NORMAL]
+biomes:
+  - SNOWY_PLAINS
+  - SNOWY_TAIGA
+  - SNOWY_BEACH
+  - SNOWY_SLOPES
+  - ICE_SPIKES
+  - FROZEN_PEAKS
+  - JAGGED_PEAKS
+  - GROVE
+probability: { numerator: 1, denominator: 650 }
+min-distance-others: 64
+min-distance-same: 256
+flatness: { radius: 4, max-variance: 5 }
+whitelist-ground: []

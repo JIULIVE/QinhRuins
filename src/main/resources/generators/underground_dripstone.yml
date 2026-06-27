@@ -1,0 +1,11 @@
+# 放置档案 · 地下·滴水石洞穴
+enabled: true
+layer: underground
+environments: [NORMAL]
+biomes: [DRIPSTONE_CAVES]
+y-band: { min: 8, max: 30 }
+probability: { numerator: 1, denominator: 500 }
+min-distance-others: 40
+min-distance-same: 180
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

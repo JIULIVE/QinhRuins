@@ -1,0 +1,12 @@
+# 放置档案 · 地表（主世界·通用，不限群系）
+# 遗迹在 template.yml 写 generation.profile: surface_overworld 共享这套规则，可局部覆盖。
+enabled: true
+layer: surface             # surface/underground/sky/ocean-surface/seabed（也可写固定数字Y）
+environments: [NORMAL]     # 维度环境：NORMAL(主世界)/NETHER(下界)/THE_END(末地)；空=不限。想兼容自定义主世界可加 CUSTOM
+worlds: []                 # 再按世界名细分（空=该环境下所有世界）
+biomes: []                 # 限定群系（空=不限）
+probability: { numerator: 1, denominator: 700 }   # 仅 director 关闭时按此各自 roll
+min-distance-others: 64
+min-distance-same: 256
+flatness: { radius: 4, max-variance: 4 }
+whitelist-ground: []

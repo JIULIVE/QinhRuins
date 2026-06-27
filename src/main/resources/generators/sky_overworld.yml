@@ -1,0 +1,12 @@
+# 放置档案 · 天空（主世界）—— 悬浮空岛/浮空遗迹
+enabled: true
+layer: sky
+environments: [NORMAL]
+worlds: []
+biomes: []
+y-band: { min: 35, max: 75 }   # 地表往上随机悬浮高度
+probability: { numerator: 1, denominator: 900 }
+min-distance-others: 80
+min-distance-same: 300
+flatness: { radius: 0, max-variance: 0 }
+whitelist-ground: []

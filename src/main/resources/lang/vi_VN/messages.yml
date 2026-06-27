@@ -1,0 +1,18 @@
+# QinhRuins player-facing messages · Vietnamese
+# Supports & color codes and placeholders ({ruin} {players} {time} {stage} {class} {n})
+messages:
+  enter-title: "&6⚔ Đang vào {ruin}"
+  enter-subtitle: "&7Tổ đội {players} người · Thời gian {time}"
+  exit: "&7Bạn đã rời tàn tích"
+  complete: "&aĐã thông quan tàn tích!"
+  discover: "&eBạn đã khám phá &6{ruin}&7 · đã thêm vào sách"
+  chest-claimed: "&cBạn đã mở rương này rồi"
+  chest-locked: "&cRương bị khóa — hoàn thành mục tiêu hiện tại trước"
+  stage-advance: "&a▶ Đã vượt giai đoạn"
+  stage-advance-sub: "&7Đang vào: {stage}"
+  complete-sub: "&7{ruin} đã bị chinh phục"
+  party-not-enough: "&eCần thêm {n} đồng đội nữa để vào"
+  growth-too-low: "&cTrình độ của bạn quá thấp để vào tàn tích này"
+  class-required: "&eTổ đội cần có một nghề {class}"
+  boss-unlock: "&c&l⚔ Boss cuối đã thức tỉnh!"
+  boss-unlock-sub: "&7Người gác đền {ruin} đã trỗi dậy — hãy đánh bại nó!"

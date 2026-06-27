@@ -1,0 +1,17 @@
+# 示例战利品表：容器战利品 + 条件分组 + 通关大奖通用
+# 用法：在遗迹模板 template.yml 写 loot.container-table: vault（容器战利品）
+#       或 reward.clear-table: vault（通关老虎机奖池）
+# containers 留空 = 遗迹范围内所有容器都生效；列出则只这些类型生效
+containers: [CHEST, BARREL]
+# vanilla: minecraft:chests/simple_dungeon  # 可选：先掷一份原版战利品表，再叠加下面 entries（复用原版地牢/要塞掉落）
+rolls: 2
+entries:
+  - { item: "vanilla:DIAMOND", weight: 10, amount: "1-3" }
+  - { item: "vanilla:GOLD_INGOT", weight: 20, amount: "2-5" }
+  - { item: "vanilla:EXPERIENCE_BOTTLE", weight: 15, amount: "2-6" }
+groups:
+  rich:
+    condition: "%player_level% >= 5"   # 需 PlaceholderAPI；无则此条件恒真
+    rolls: 1
+    entries:
+      - { item: "vanilla:EMERALD", weight: 1, amount: 2 }

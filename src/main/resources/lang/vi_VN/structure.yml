@@ -1,0 +1,14 @@
+# QinhRuins structure paste/snapshot · Tiếng Việt
+structure:
+  file-not-found: "Không tìm thấy file cấu trúc: {name}"
+  world-null: "Thế giới là null"
+  paste-failed: "Dán thất bại: {error}"
+  spread-place: "Đã đặt theo khung {count} khối (đang chạy nền)"
+  mask-place: "Đã dán theo mặt nạ {count} khối"
+  mask-place-failed: "Dán theo mặt nạ thất bại: {error}"
+  save-failed: "Lưu thất bại: {error}"
+  snapshot-not-found: "Không tìm thấy file snapshot"
+  restore-failed: "Khôi phục thất bại: {error}"
+  palette-no-layout: "Palette {palette} không thể tạo bố cục"
+  palette-all-failed: "Tất cả ô của palette đều dán thất bại"
+  procedural-done: "Đã tạo theo thủ tục {pasted}/{total} ô"

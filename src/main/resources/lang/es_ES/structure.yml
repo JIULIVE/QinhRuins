@@ -1,0 +1,14 @@
+# QinhRuins structure paste/snapshot · Español
+structure:
+  file-not-found: "Archivo de estructura no encontrado: {name}"
+  world-null: "El mundo es nulo"
+  paste-failed: "Pegado fallido: {error}"
+  spread-place: "Colocados por marco {count} bloques (ejecutándose en segundo plano)"
+  mask-place: "Pegados con máscara {count} bloques"
+  mask-place-failed: "Pegado con máscara fallido: {error}"
+  save-failed: "Guardado fallido: {error}"
+  snapshot-not-found: "Archivo de instantánea no encontrado"
+  restore-failed: "Restauración fallida: {error}"
+  palette-no-layout: "La paleta {palette} no pudo generar un diseño"
+  palette-all-failed: "Todas las teselas de la paleta fallaron al pegarse"
+  procedural-done: "Generadas procedimentalmente {pasted}/{total} teselas"
