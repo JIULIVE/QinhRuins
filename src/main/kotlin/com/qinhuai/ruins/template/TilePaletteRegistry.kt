@@ -57,6 +57,8 @@ object TilePaletteRegistry {
                 weight = (m["weight"] as? Number)?.toInt()?.coerceAtLeast(1) ?: 1,
                 maxCount = (m["max-count"] as? Number)?.toInt()?.coerceAtLeast(1) ?: 99,
                 role = m["role"]?.toString() ?: "room",
+                repetitionPenalty = (m["repetition-penalty"] as? Number)?.toInt() ?: 0,
+                noRepeat = (m["no-repeat"] as? Boolean) ?: false,
             )
         }
         if (tiles.isEmpty()) {

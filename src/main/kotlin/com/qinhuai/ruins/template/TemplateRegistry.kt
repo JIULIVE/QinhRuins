@@ -15,6 +15,7 @@ import java.util.logging.Logger
 object TemplateRegistry {
 
     private val templates = LinkedHashMap<String, RuinTemplate>()
+    private val AUTO_MATERIAL_TOKENS = setOf("auto", "match", "match-terrain", "terrain", "*")
 
     fun load(templatesDir: File, logger: Logger): Int {
         templates.clear()
@@ -124,12 +125,14 @@ object TemplateRegistry {
         var default: String? = null
         val biomeMap = HashMap<String, String>()
         val section = yml.getConfigurationSection("foundation.materials")
+        var matchTerrain = yml.getBoolean("foundation.match-terrain", false)
         section?.getKeys(false)?.forEach { keyGroup ->
             val material = section.getString(keyGroup) ?: return@forEach
             keyGroup.split(",").forEach { key ->
                 val trimmed = key.trim()
-                if (trimmed.equals("default", ignoreCase = true)) default = material
-                else biomeMap[trimmed.uppercase()] = material
+                if (trimmed.equals("default", ignoreCase = true)) {
+                    if (material.trim().lowercase() in AUTO_MATERIAL_TOKENS) matchTerrain = true else default = material
+                } else biomeMap[trimmed.uppercase()] = material
             }
         }
         return FoundationConfig(
@@ -139,6 +142,7 @@ object TemplateRegistry {
             defaultMaterial = default,
             biomeMaterials = biomeMap,
             blendRadius = yml.getInt("foundation.blend-radius", 0),
+            matchTerrain = matchTerrain,
         )
     }
 

@@ -7,8 +7,8 @@ object PasteEngines {
     private lateinit var native: NativePasteEngine
     private var active: PasteEngine? = null
 
-    fun init(templatesDir: File, spreadThreshold: Int, handleMarkers: Boolean = true) {
-        native = NativePasteEngine(templatesDir, spreadThreshold, handleMarkers)
+    fun init(templatesDir: File, spreadThreshold: Int, handleMarkers: Boolean = true, pasteMillisPerTick: Long = 8L) {
+        native = NativePasteEngine(templatesDir, spreadThreshold, handleMarkers, pasteMillisPerTick)
         active = native
     }
 

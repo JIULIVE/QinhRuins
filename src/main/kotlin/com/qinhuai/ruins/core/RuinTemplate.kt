@@ -26,6 +26,7 @@ data class GenerationRule(
     val flatnessRadius: Int,
     val flatnessMaxVariance: Int,
     val flatnessMaxErrors: Int = 0,
+    val placementAttempts: Int = 1,
     val spawnInWater: Boolean = true,
     val spawnInLava: Boolean = false,
     val spawnInVoid: Boolean = true,
@@ -69,6 +70,7 @@ data class FoundationConfig(
     val defaultMaterial: String?,
     val biomeMaterials: Map<String, String>,
     val blendRadius: Int = 0,
+    val matchTerrain: Boolean = false,
 )
 
 data class RuinTemplate(

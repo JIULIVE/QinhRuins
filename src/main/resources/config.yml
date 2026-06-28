@@ -138,7 +138,8 @@ generation:
   max-per-tick: 4       # 每次处理的候选区块上限（限流防卡）
   max-millis-per-tick: 3  # ★每次处理的毫秒预算：处理超过此耗时即让出本tick（比固定条数更抗压，防生成尖峰冻服）
   period-ticks: 5       # 候选处理任务的间隔 tick
-  spread-place-threshold: 30000  # 结构方块数超此值且NONE朝向→分帧放置(8192块/tick,后台铺,不冻服)。小结构仍原生单发
+  spread-place-threshold: 30000  # 结构方块数超此值且NONE朝向→分帧放置(后台铺,不冻服)。小结构仍原生单发
+  paste-millis-per-tick: 8  # ★分帧放置/标记清理的每tick毫秒预算：铺到超过此耗时即让出本tick(墙钟切片代替固定块数,自适应负载更抗压)。每tick至少铺1024块保底
   marker-blocks: true   # 原理图标记块自动处理：屏障(BARRIER)→放置时清为空气；基岩(BEDROCK)→保留原地形不覆盖(用作"地形透出"标记)。false=原样放置(想保留真屏障/真基岩时关)
 
   # 生成总控（统一调度：权重抽签 + 全局密度 + 活世界再生）
@@ -175,6 +176,18 @@ session:
   bossbar: true
   bossbar-color: PURPLE   # PINK/BLUE/RED/GREEN/YELLOW/PURPLE/WHITE
   bossbar-style: SOLID    # SOLID/SEGMENTED_6/SEGMENTED_10/SEGMENTED_12/SEGMENTED_20
+
+# 内容包下载（方便服主一键拉取结构资源包）
+content:
+  catalog-url: "https://raw.githubusercontent.com/JIULIVE/QinhRuins/main/catalog.yml"  # 内容包目录(YAML)，/qr catalog 读取它列出可下载的包
+  max-download-mb: 50   # 单个内容包下载体积上限(MB)，超出即中止，防恶意大包
+  allow-http: false     # 是否允许明文 http:// 下载源(默认只许 https，更安全)
+
+# /qr download <包id|直链zip>  →  下载并解压到数据目录后自动重载
+# /qr catalog                  →  列出 catalog-url 里登记的内容包
+# /qr packs                    →  列出已安装内容包
+# 安全：仅解压 templates/ generators/ palettes/ loottables/ blueprints/ sections/ lang/ affixes.yml 等白名单路径，
+#       防目录穿越(zip-slip)与覆盖 config.yml；包内可放 pack.yml(id/name/version)标注元数据。
 
 # 玩家可见消息已迁移到 lang/<语言>/messages.yml（见顶部 language 配置项）。
 # 想改这些文案：编辑 lang/zh_cn/messages.yml 或 lang/en_US/messages.yml。

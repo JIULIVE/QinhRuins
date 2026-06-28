@@ -3,7 +3,7 @@ version: '${project.version}'
 main: com.qinhuai.ruins.QinhRuins
 api-version: '1.21'
 author: Qinhuai
-description: 秦淮遗迹探索插件 — Paper / Purpur / Spigot 1.21.11+，Java 25+
+description: 秦淮遗迹探索插件 — Paper / Purpur / Spigot 1.21.11 ~ 26.2.x，Java 25+
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:2.3.0
 depend: [QinhCoreLib]

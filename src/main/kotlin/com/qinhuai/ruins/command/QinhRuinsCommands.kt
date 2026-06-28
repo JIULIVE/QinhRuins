@@ -53,6 +53,14 @@ object QinhRuinsCommands {
         manager.command(root.literal("version").permission("qinhruins.use").handler { ctx -> sendVersion(ctx.sender()) })
         manager.command(root.literal("reload").permission("qinhruins.admin").handler { ctx -> reload(ctx) })
 
+        manager.command(
+            root.literal("download").permission("qinhruins.admin")
+                .required(QinhCloudComponents.requiredString("pack", Supplier { com.qinhuai.ruins.content.ContentService.catalogIds() }))
+                .handler { ctx -> com.qinhuai.ruins.content.ContentService.download(ctx.sender(), ctx.get("pack")) }
+        )
+        manager.command(root.literal("catalog").permission("qinhruins.admin").handler { ctx -> com.qinhuai.ruins.content.ContentService.showCatalog(ctx.sender()) })
+        manager.command(root.literal("packs").permission("qinhruins.admin").handler { ctx -> com.qinhuai.ruins.content.ContentService.showInstalled(ctx.sender()) })
+
         manager.command(root.literal("pos1").permission("qinhruins.admin").handler { ctx -> setPos(ctx, 1) })
         manager.command(root.literal("pos2").permission("qinhruins.admin").handler { ctx -> setPos(ctx, 2) })
 
@@ -232,6 +240,9 @@ object QinhRuinsCommands {
             Lang.get("cmd.help-info"),
             Lang.get("cmd.help-profile"),
             Lang.get("cmd.help-reload"),
+            Lang.get("cmd.help-catalog"),
+            Lang.get("cmd.help-download"),
+            Lang.get("cmd.help-packs"),
         ).forEach { TextUtil.sendColored(sender, it) }
     }
 
@@ -240,6 +251,11 @@ object QinhRuinsCommands {
     }
 
     private fun reload(ctx: CommandContext<CommandSender>) {
+        val count = reloadAll()
+        Lang.send(ctx.sender(), "cmd.reload-done", "count" to count, "anchors" to AnchorManager.all().size)
+    }
+
+    fun reloadAll(): Int {
         val plugin = QinhRuins.instance
         plugin.reloadConfig()
         com.qinhuai.ruins.lang.Lang.load()
@@ -271,7 +287,7 @@ object QinhRuinsCommands {
         SessionManager.start(plugin, plugin.config)
         RealmManager.start(plugin, plugin.config)
         MechanismService.start(plugin, plugin.config)
-        Lang.send(ctx.sender(), "cmd.reload-done", "count" to count, "anchors" to AnchorManager.all().size)
+        return count
     }
 
     private fun setPos(ctx: CommandContext<CommandSender>, which: Int) {

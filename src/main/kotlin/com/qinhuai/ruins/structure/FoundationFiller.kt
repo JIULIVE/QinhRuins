@@ -35,6 +35,10 @@ object FoundationFiller {
         }
         if (columns.isEmpty()) return
 
+        val sampled = if (config.matchTerrain)
+            sampleTerrainMaterial(world, minX, maxX, minZ, maxZ, baseY, blend)
+        else null
+
         object : BukkitRunnable() {
             override fun run() {
                 var processed = 0
@@ -43,16 +47,47 @@ object FoundationFiller {
                         cancel()
                         return
                     }
-                    fillColumn(world, col[0], col[1], col[2], config)
+                    fillColumn(world, col[0], col[1], col[2], config, sampled)
                     processed++
                 }
             }
         }.runTaskTimer(QinhRuins.instance, 1L, 1L)
     }
 
-    private fun fillColumn(world: World, x: Int, startY: Int, z: Int, config: FoundationConfig) {
+    private fun sampleTerrainMaterial(world: World, minX: Int, maxX: Int, minZ: Int, maxZ: Int, baseY: Int, blend: Int): Material? {
+        val ring = blend + 1
+        val counts = HashMap<Material, Int>()
+        fun tally(x: Int, z: Int) {
+            var y = baseY - 1
+            var guard = 0
+            while (y > world.minHeight && guard < 24) {
+                val type = world.getBlockAt(x, y, z).type
+                if (type.isSolid && !isFoliage(type) && type != Material.WATER && type != Material.LAVA) {
+                    counts.merge(type, 1) { a, b -> a + b }
+                    return
+                }
+                y--
+                guard++
+            }
+        }
+        var x = minX - ring
+        while (x <= maxX + ring) {
+            tally(x, minZ - ring)
+            tally(x, maxZ + ring)
+            x++
+        }
+        var z = minZ - ring
+        while (z <= maxZ + ring) {
+            tally(minX - ring, z)
+            tally(maxX + ring, z)
+            z++
+        }
+        return counts.maxByOrNull { it.value }?.key
+    }
+
+    private fun fillColumn(world: World, x: Int, startY: Int, z: Int, config: FoundationConfig, sampled: Material?) {
         if (startY <= world.minHeight) return
-        val material = materialFor(world, x, startY, z, config) ?: return
+        val material = materialFor(world, x, startY, z, config, sampled) ?: return
         var y = startY
         var depth = 0
         while (depth < config.maxDepth && y > world.minHeight) {
@@ -68,10 +103,11 @@ object FoundationFiller {
         }
     }
 
-    private fun materialFor(world: World, x: Int, y: Int, z: Int, config: FoundationConfig): Material? {
+    private fun materialFor(world: World, x: Int, y: Int, z: Int, config: FoundationConfig, sampled: Material?): Material? {
         val key = biomeKey(world, x, y, z)
-        val name = config.biomeMaterials[key] ?: config.defaultMaterial ?: return null
-        return Material.matchMaterial(name)
+        config.biomeMaterials[key]?.let { return Material.matchMaterial(it) }
+        if (config.matchTerrain && sampled != null) return sampled
+        return config.defaultMaterial?.let { Material.matchMaterial(it) }
     }
 
     private fun biomeKey(world: World, x: Int, y: Int, z: Int): String {

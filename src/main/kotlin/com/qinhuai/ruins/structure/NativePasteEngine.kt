@@ -22,9 +22,12 @@ class NativePasteEngine(
     private val templatesDir: File,
     private val spreadThreshold: Int = 30000,
     private val handleMarkers: Boolean = true,
+    pasteMillisPerTick: Long = 8L,
 ) : PasteEngine {
 
     override val id: String = "native"
+
+    private val pasteBudgetNanos = maxOf(1L, pasteMillisPerTick) * 1_000_000L
 
     private val waterlineCache = HashMap<String, Int>()
     private val markerCache = HashMap<String, Pair<Boolean, Boolean>>()
@@ -108,11 +111,12 @@ class NativePasteEngine(
         val total = w * h * l
         if (total <= 0) return
         val air = Material.AIR.createBlockData()
+        val budget = pasteBudgetNanos
         object : BukkitRunnable() {
             private var i = 0
             override fun run() {
-                var n = 0
-                while (n < 4096 && i < total) {
+                val deadline = System.nanoTime() + budget
+                while (i < total) {
                     val x = i % w
                     val z = (i / w) % l
                     val y = i / (w * l)
@@ -123,7 +127,7 @@ class NativePasteEngine(
                         else -> {}
                     }
                     i++
-                    n++
+                    if ((i and 1023) == 0 && System.nanoTime() >= deadline) break
                 }
                 if (i >= total) cancel()
             }
@@ -137,20 +141,24 @@ class NativePasteEngine(
         val clearBarrier = markers.first
         val keepBedrock = markers.second
         val air = Material.AIR.createBlockData()
+        val budget = pasteBudgetNanos
         object : BukkitRunnable() {
             private var i = 0
             override fun run() {
-                var n = 0
-                while (n < 8192 && i < blocks.size) {
+                val deadline = System.nanoTime() + budget
+                while (i < blocks.size) {
                     val b = blocks[i]
                     i++
-                    n++
                     val type = b.type
-                    if (keepBedrock && type == Material.BEDROCK) continue
+                    if (keepBedrock && type == Material.BEDROCK) {
+                        if ((i and 1023) == 0 && System.nanoTime() >= deadline) break
+                        continue
+                    }
                     val loc = b.location
                     val data = if (clearBarrier && type == Material.BARRIER) air else b.blockData
                     world.getBlockAt(origin.blockX + loc.blockX, origin.blockY + loc.blockY, origin.blockZ + loc.blockZ)
                         .setBlockData(data, false)
+                    if ((i and 1023) == 0 && System.nanoTime() >= deadline) break
                 }
                 if (i >= blocks.size) {
                     cancel()

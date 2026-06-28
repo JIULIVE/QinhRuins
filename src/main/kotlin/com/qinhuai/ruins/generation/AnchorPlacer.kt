@@ -14,8 +14,7 @@ object AnchorPlacer {
     fun tryPlace(world: World, chunkX: Int, chunkZ: Int, template: RuinTemplate, random: Random): Boolean {
         val gen = template.generation
         if (gen.spawnChance < 1.0 && random.nextDouble() >= gen.spawnChance) return false
-        val bx = chunkX * 16 + random.nextInt(16)
-        val bz = chunkZ * 16 + random.nextInt(16)
+        val (bx, bz) = pickCandidate(world, chunkX, chunkZ, gen, random)
 
         gen.spawnRegion?.let { if (!it.allows(bx, bz)) return false }
 
@@ -52,6 +51,46 @@ object AnchorPlacer {
         val anchor = outcome.anchor ?: return false
         GenerationDirector.announceSpawn(template, anchor)
         return true
+    }
+
+    private fun pickCandidate(world: World, chunkX: Int, chunkZ: Int, gen: com.qinhuai.ruins.core.GenerationRule, random: Random): Pair<Int, Int> {
+        val attempts = gen.placementAttempts.coerceAtLeast(1)
+        if (attempts <= 1) {
+            return (chunkX * 16 + random.nextInt(16)) to (chunkZ * 16 + random.nextInt(16))
+        }
+        val radius = if (gen.flatnessRadius > 0) gen.flatnessRadius else 3
+        var bestX = chunkX * 16 + random.nextInt(16)
+        var bestZ = chunkZ * 16 + random.nextInt(16)
+        var bestScore = roughness(world, bestX, bestZ, radius)
+        repeat(attempts - 1) {
+            val cx = chunkX * 16 + random.nextInt(16)
+            val cz = chunkZ * 16 + random.nextInt(16)
+            val score = roughness(world, cx, cz, radius)
+            if (score < bestScore) {
+                bestScore = score
+                bestX = cx
+                bestZ = cz
+            }
+        }
+        return bestX to bestZ
+    }
+
+    private fun roughness(world: World, x: Int, z: Int, radius: Int): Int {
+        var min = Int.MAX_VALUE
+        var max = Int.MIN_VALUE
+        val step = if (radius <= 4) 2 else 3
+        var dx = -radius
+        while (dx <= radius) {
+            var dz = -radius
+            while (dz <= radius) {
+                val h = surfaceY(world, x + dx, z + dz)
+                if (h < min) min = h
+                if (h > max) max = h
+                dz += step
+            }
+            dx += step
+        }
+        return if (min == Int.MAX_VALUE) 0 else max - min
     }
 
     data class DiagLine(val label: String, val ok: Boolean, val detail: String)

@@ -58,6 +58,7 @@ object Lang {
     }
 
     private fun loadLocaleInto(plugin: QinhRuins, loc: String, into: MutableMap<String, String>) {
+        loadBundledLocaleInto(plugin, loc, into)
         val dir = File(plugin.dataFolder, "lang/$loc")
         if (!dir.isDirectory) return
         dir.listFiles { f -> f.isFile && f.name.endsWith(".yml") }
@@ -66,6 +67,24 @@ object Lang {
                 val yaml = YamlConfiguration.loadConfiguration(file)
                 flatten("", yaml, into)
             }
+    }
+
+    private fun loadBundledLocaleInto(plugin: QinhRuins, loc: String, into: MutableMap<String, String>) {
+        val location = plugin.javaClass.protectionDomain.codeSource?.location ?: return
+        val prefix = "lang/$loc/"
+        runCatching {
+            JarFile(File(location.toURI())).use { jar ->
+                jar.entries().asSequence()
+                    .filter { !it.isDirectory && it.name.startsWith(prefix) && it.name.endsWith(".yml") }
+                    .sortedBy { it.name }
+                    .forEach { entry ->
+                        jar.getInputStream(entry).use { input ->
+                            val yaml = YamlConfiguration.loadConfiguration(input.reader(Charsets.UTF_8))
+                            flatten("", yaml, into)
+                        }
+                    }
+            }
+        }
     }
 
     private fun flatten(prefix: String, section: ConfigurationSection, into: MutableMap<String, String>) {

@@ -62,7 +62,7 @@ class QinhRuins : JavaPlugin() {
         lateinit var commandManager: LegacyPaperCommandManager<CommandSender>
             private set
 
-        const val VERSION = "1.0.0"
+        const val VERSION = "1.1.0"
 
         private val LOGO = listOf(
             "",
@@ -108,7 +108,7 @@ class QinhRuins : JavaPlugin() {
 
         val templatesDir = File(dataFolder, "templates")
         File(dataFolder, "schematics").mkdirs()
-        PasteEngines.init(templatesDir, config.getInt("generation.spread-place-threshold", 30000), config.getBoolean("generation.marker-blocks", true))
+        PasteEngines.init(templatesDir, config.getInt("generation.spread-place-threshold", 30000), config.getBoolean("generation.marker-blocks", true), config.getLong("generation.paste-millis-per-tick", 8L))
         StructureSaver.init(templatesDir)
         val generatorsDir = File(dataFolder, "generators")
         listOf(
